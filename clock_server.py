@@ -1,11 +1,12 @@
 import sys
 import serial
 import serial.tools.list_ports
+from http.server import HTTPServer, BaseHTTPRequestHandler
 
 # You must install pyserial first!
 # pip install pyserial
 
-from http.server import HTTPServer, BaseHTTPRequestHandler
+PORT = 8080
 
 serialPort = None
 
@@ -23,7 +24,7 @@ class VotingHTTPRequestHandler(BaseHTTPRequestHandler):
         else:
             self.send_response(404)
             self.end_headers()
-            self.wfile.write("nah, not found mate")
+            self.wfile.write(b"404 Document Not Found")
 
     def do_POST(self):
         if self.path == "/vote":
@@ -43,7 +44,6 @@ class VotingHTTPRequestHandler(BaseHTTPRequestHandler):
                     self.send_character("b")
                 else:
                     self.send_response(400)
-                    print("Some asshole is sending you random shit...")
             self.end_headers()
             self.wfile.write(b"")
 
@@ -62,8 +62,8 @@ def main():
 
     if len(sys.argv) == 2:
         serialPort = serial.Serial(sys.argv[1], 9600)
-        httpd = HTTPServer(('localhost', 8000), VotingHTTPRequestHandler)
-        print("Serving on http://localhost:8000/")
+        httpd = HTTPServer(('localhost', PORT), VotingHTTPRequestHandler)
+        print("Serving on http://localhost:" + str(PORT) + "/")
         httpd.serve_forever()
         serialPort.close()
     else:
