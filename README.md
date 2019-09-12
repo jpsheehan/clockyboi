@@ -19,3 +19,8 @@ Device can be any COM port (on Windows) or /dev path (Linux) or "NULL" if you do
 ```bash
 python server.py COM1
 ```
+
+## Known Issues
+
+- The HTTP server is based on Python's HTTPServer implementation, this is not recommended for production.
+- The user's vote is stored in local storage on the browser. This is not a fantastic way of preventing users from voting more than once.
