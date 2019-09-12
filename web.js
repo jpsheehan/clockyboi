@@ -9,7 +9,7 @@ function showError() {
 }
 
 function showSuccess() {
-  document.cookie = getSelectedColour();
+  localStorage.setItem("colour", getSelectedColour());
   okMessage.style.display = "block";
 }
 
@@ -27,7 +27,7 @@ function getSelectedColour() {
 }
 
 function getCookieColour() {
-  var cookie = document.cookie;
+  var cookie = localStorage.getItem("colour");
   if (cookie == "red" || cookie == "green" || cookie == "blue") {
     return cookie;
   } else {
