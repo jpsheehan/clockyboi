@@ -15,12 +15,11 @@ class VotingHTTPRequestHandler(BaseHTTPRequestHandler):
 
     def do_GET(self):
         if self.path == "/":
-            self.send_response(200)
-            self.end_headers()
-            f = open("index.html", "rb")
-            self.wfile.write(f.read())
-            f.close()
-
+            self.serve_file("index.html")
+        elif self.path == "/web.js":
+            self.serve_file("web.js")
+        elif self.path == "/style.css":
+            self.serve_file("style.css")
         else:
             self.send_response(404)
             self.end_headers()
@@ -51,9 +50,18 @@ class VotingHTTPRequestHandler(BaseHTTPRequestHandler):
             self.send_response(404)
             self.end_headers()
 
+    def serve_file(self, filename):
+        self.send_response(200)
+        self.end_headers()
+        f = open(filename, "rb")
+        self.wfile.write(f.read())
+        f.close()
+
     def send_character(self, c):
-        print("Someone voted for", c)
-        serialPort.write((c + "\n").encode("utf8"))
+        print(self.client_address[0] + ":" +
+              str(self.client_address[1]), "voted for", c)
+        if serialPort is not None:
+            serialPort.write((c + "\n").encode("utf8"))
 
 
 def main():
@@ -61,19 +69,31 @@ def main():
     global serialPort
 
     if len(sys.argv) == 2:
-        serialPort = serial.Serial(sys.argv[1], 9600)
+        serialPortName = sys.argv[1]
+
+        if serialPortName.upper() != "NULL":
+            print("Using device", serialPortName)
+            serialPort = serial.Serial(
+                sys.argv[1], 9600, parity=serial.PARITY_NONE)
+        else:
+            print("Using dummy serial device")
+            serialPort = None
+
         httpd = HTTPServer(('localhost', networkPort),
                            VotingHTTPRequestHandler)
         print("Serving on http://localhost:" + str(networkPort) + "/")
         httpd.serve_forever()
         serialPort.close()
     else:
-        print("Usage:", sys.argv[0], "port")
+        print("Usage: python server.py device")
         ports = serial.tools.list_ports.comports()
         if len(ports) == 0:
-            print("Please plug in an Arduino!")
+            print("Please plug in an serial device or specify 'NULL'.")
         else:
-            print("port must be one of", ", ".join(ports))
+            print("You must specify a device. Detected devices:")
+            print("  - NULL")
+            for p in ports:
+                print("  -", p.device)
 
 
 if __name__ == "__main__":
