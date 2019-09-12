@@ -1,6 +1,11 @@
-function makeColourChanger(col) {
-  return function(e) {
-    document.getElementById("colour-square").style.backgroundColor = col;
+function makeColourChanger(colourName, colourCode) {
+  return function(ev) {
+    if (ev && ev.preventDefault) {
+      ev.preventDefault();
+    }
+
+    selectedColour = colourName;
+    updateColourSquare();
   };
 }
 
@@ -10,20 +15,24 @@ function showError() {
 
 function showSuccess() {
   localStorage.setItem("colour", getSelectedColour());
+  document.getElementById("chosen-colour-name").innerText = getSelectedColour();
   okMessage.style.display = "block";
 }
 
 function getSelectedColour() {
-  var radios = document.getElementsByName("colour");
-  var colour = null;
-  for (i = 0; i < radios.length; i++) {
-    if (radios[i].checked) {
-      colour = radios[i].value;
-      break;
+  if (selectedColour === null) {
+    selectedColour = getCookieColour();
+    if (selectedColour === null) {
+      selectedColour = "red";
     }
   }
-  document.getElementById("chosen-colour-name").innerText = colour;
-  return colour;
+  return selectedColour;
+}
+
+function updateColourSquare() {
+  document.getElementById(
+    "colour-square"
+  ).style.backgroundColor = selectedColour;
 }
 
 function getCookieColour() {
@@ -36,10 +45,9 @@ function getCookieColour() {
 }
 
 function disableForm() {
-  var radios = document.getElementsByName("colour");
-  for (var i = 0; i < radios.length; i++) {
-    radios[i].disabled = true;
-  }
+  document.getElementById("red").disabled = true;
+  document.getElementById("green").disabled = true;
+  document.getElementById("blue").disabled = true;
   document.getElementById("submit").disabled = true;
 }
 
@@ -87,15 +95,17 @@ const colours = {
 const okMessage = document.getElementById("ok-message-row");
 const errorMessage = document.getElementById("error-message-row");
 
+var selectedColour = null;
+
 document
   .getElementById("red")
-  .addEventListener("click", makeColourChanger(colours["red"]));
+  .addEventListener("click", makeColourChanger("red", colours["red"]));
 document
   .getElementById("green")
-  .addEventListener("click", makeColourChanger(colours["green"]));
+  .addEventListener("click", makeColourChanger("green", colours["green"]));
 document
   .getElementById("blue")
-  .addEventListener("click", makeColourChanger(colours["blue"]));
+  .addEventListener("click", makeColourChanger("blue", colours["blue"]));
 
 document.getElementById("form").addEventListener("submit", vote);
 
@@ -110,5 +120,5 @@ document.body.onload = function() {
     showSuccess();
   }
 
-  makeColourChanger(colours[colour])();
+  updateColourSquare();
 };
