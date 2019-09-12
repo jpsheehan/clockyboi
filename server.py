@@ -6,7 +6,7 @@ from http.server import HTTPServer, BaseHTTPRequestHandler
 # You must install pyserial first!
 # pip install pyserial
 
-PORT = 8080
+networkPort = 8080
 
 serialPort = None
 
@@ -17,7 +17,7 @@ class VotingHTTPRequestHandler(BaseHTTPRequestHandler):
         if self.path == "/":
             self.send_response(200)
             self.end_headers()
-            f = open("vote.html", "rb")
+            f = open("index.html", "rb")
             self.wfile.write(f.read())
             f.close()
 
@@ -62,8 +62,9 @@ def main():
 
     if len(sys.argv) == 2:
         serialPort = serial.Serial(sys.argv[1], 9600)
-        httpd = HTTPServer(('localhost', PORT), VotingHTTPRequestHandler)
-        print("Serving on http://localhost:" + str(PORT) + "/")
+        httpd = HTTPServer(('localhost', networkPort),
+                           VotingHTTPRequestHandler)
+        print("Serving on http://localhost:" + str(networkPort) + "/")
         httpd.serve_forever()
         serialPort.close()
     else:
