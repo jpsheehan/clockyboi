@@ -1,0 +1,20 @@
+#colour-square {
+  width: 200px;
+  height: 200px;
+  margin: auto;
+  background: white;
+
+  border-radius: 16px;
+}
+
+#ok-message-row {
+  display: none;
+}
+
+#error-message-row {
+  display: none;
+}
+
+#form-row {
+  display: none;
+}
