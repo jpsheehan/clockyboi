@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+
+    <!-- Bootstrap CSS -->
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+      integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+      crossorigin="anonymous"
+    />
+
+    <style>
+      #colour-square {
+        width: 200px;
+        height: 200px;
+        margin: auto;
+        background: white;
+
+        border-radius: 16px;
+      }
+
+      #ok-message-row {
+        display: none;
+      }
+
+      #error-message-row {
+        display: none;
+      }
+
+      #form-row {
+        display: none;
+      }
+    </style>
+
+    <title>Clock Tower Voting Booth</title>
+  </head>
+  <body>
+    <div class="container">
+      <div class="row text-center">
+        <div class="col">
+          <div class="h1">Clock Tower Voting Booth</div>
+          <br />
+        </div>
+      </div>
+      <div class="row text-center">
+        <div class="col">
+          <div class="row" id="colour-square"></div>
+          <br />
+        </div>
+      </div>
+      <div class="row text-center" id="form-row">
+        <div class="col">
+          <form action="#" id="form">
+            <div class="form-group">
+              <div class="form-check">
+                <input
+                  class="form-check-input"
+                  type="radio"
+                  name="colour"
+                  id="red"
+                  value="red"
+                  checked
+                />
+                <label class="form-check-label" for="red">
+                  Red
+                </label>
+              </div>
+              <div class="form-check">
+                <input
+                  class="form-check-input"
+                  type="radio"
+                  name="colour"
+                  id="green"
+                  value="green"
+                />
+                <label class="form-check-label" for="green">
+                  Green
+                </label>
+              </div>
+              <div class="form-check">
+                <input
+                  class="form-check-input"
+                  type="radio"
+                  name="colour"
+                  id="blue"
+                  value="blue"
+                />
+                <label class="form-check-label" for="blue">
+                  Blue
+                </label>
+              </div>
+            </div>
+            <div class="form-group">
+              <button type="submit" class="btn-lg btn-primary" id="submit">
+                Vote
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+      <div class="row text-center" id="ok-message-row">
+        <div class="col">
+          <div class="alert alert-success" role="alert">
+            Your vote has been submitted. You voted for
+            <span id="chosen-colour-name"></span>.
+          </div>
+        </div>
+      </div>
+      <div class="row text-center" id="error-message-row">
+        <div class="col">
+          <div class="alert alert-danger" role="alert">
+            An error occurred. Jesse's fault. Soz lol. This is computer
+            engineering at its finest. Hurl abuse at
+            <a href="mailto:jps111@uclive.ac.nz">jps111@uclive.ac.nz</a>.
+          </div>
+        </div>
+      </div>
+      <div class="row text-center">
+        <div class="col small">
+          <em>Another reliable yarn from Sheehan Industries</em>
+        </div>
+      </div>
+    </div>
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script
+      src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+      integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+      integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+      integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+      crossorigin="anonymous"
+    ></script>
+
+    <script>
+      function makeColourChanger(col) {
+        return function(e) {
+          document.getElementById("colour-square").style.backgroundColor = col;
+        };
+      }
+
+      function showError() {
+        errorMessage.style.display = "block";
+      }
+
+      function showSuccess() {
+        document.cookie = getSelectedColour();
+        okMessage.style.display = "block";
+      }
+
+      function getSelectedColour() {
+        var radios = document.getElementsByName("colour");
+        var colour = null;
+        for (i = 0; i < radios.length; i++) {
+          if (radios[i].checked) {
+            colour = radios[i].value;
+            break;
+          }
+        }
+        document.getElementById("chosen-colour-name").innerText = colour;
+        return colour;
+      }
+
+      function getCookieColour() {
+        var cookie = document.cookie;
+        if (cookie == "red" || cookie == "green" || cookie == "blue") {
+          return cookie;
+        } else {
+          return null;
+        }
+      }
+
+      function disableForm() {
+        var radios = document.getElementsByName("colour");
+        for (var i = 0; i < radios.length; i++) {
+          radios[i].disabled = true;
+        }
+        document.getElementById("submit").disabled = true;
+      }
+
+      function hideVoting() {
+        document.getElementById("form-row").style.display = "none";
+      }
+
+      function showVoting() {
+        document.getElementById("form-row").style.display = "block";
+      }
+
+      function vote(ev) {
+        ev.preventDefault();
+
+        var colour = getSelectedColour();
+
+        disableForm();
+
+        var xhr = new XMLHttpRequest();
+
+        xhr.open("POST", "/vote", true);
+
+        xhr.onreadystatechange = function() {
+          if (this.readyState == 4) {
+            if (this.status == 200) {
+              showSuccess();
+              document.cookie = colour;
+            } else {
+              showError();
+            }
+          }
+        };
+
+        xhr.send("colour=" + colour);
+
+        hideVoting();
+      }
+
+      const colours = {
+        red: "#FF0000",
+        green: "#00FF00",
+        blue: "#0000FF"
+      };
+
+      const okMessage = document.getElementById("ok-message-row");
+      const errorMessage = document.getElementById("error-message-row");
+
+      document
+        .getElementById("red")
+        .addEventListener("click", makeColourChanger(colours["red"]));
+      document
+        .getElementById("green")
+        .addEventListener("click", makeColourChanger(colours["green"]));
+      document
+        .getElementById("blue")
+        .addEventListener("click", makeColourChanger(colours["blue"]));
+
+      document.getElementById("form").addEventListener("submit", vote);
+
+      document.body.onload = function() {
+        var colour = getCookieColour();
+
+        if (colour == null) {
+          colour = getSelectedColour();
+          showVoting();
+        } else {
+          hideVoting();
+          showSuccess();
+        }
+
+        makeColourChanger(colours[colour])();
+      };
+    </script>
+  </body>
+</html>
