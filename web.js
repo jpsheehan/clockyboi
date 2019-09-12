@@ -14,8 +14,7 @@ function showError() {
 }
 
 function showSuccess() {
-  localStorage.setItem("colour", getSelectedColour());
-  document.getElementById("chosen-colour-name").innerText = getSelectedColour();
+  updateSelectedColourText();
   okMessage.style.display = "block";
 }
 
@@ -27,6 +26,14 @@ function getSelectedColour() {
     }
   }
   return selectedColour;
+}
+
+function updateSelectedColourText() {
+  document.getElementById("chosen-colour-name").innerText = getSelectedColour();
+}
+
+function getHasVoted() {
+  return window.localStorage.getItem("colour") !== null;
 }
 
 function updateColourSquare() {
@@ -73,8 +80,8 @@ function vote(ev) {
   xhr.onreadystatechange = function() {
     if (this.readyState == 4) {
       if (this.status == 200) {
+        localStorage.setItem("colour", colour);
         showSuccess();
-        document.cookie = colour;
       } else {
         showError();
       }
@@ -110,15 +117,13 @@ document
 document.getElementById("form").addEventListener("submit", vote);
 
 document.body.onload = function() {
-  var colour = getCookieColour();
+  getSelectedColour();
+  updateColourSquare();
 
-  if (colour == null) {
-    colour = getSelectedColour();
-    showVoting();
-  } else {
+  if (getHasVoted()) {
     hideVoting();
     showSuccess();
+  } else {
+    showVoting();
   }
-
-  updateColourSquare();
 };
