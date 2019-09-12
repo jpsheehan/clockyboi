@@ -1,5 +1,7 @@
 # Clock Tower Voting Booth
 
+**Written by JP Sheehan. Licensed under the GPLv3.**
+
 A proof of concept web-based voting platform for interacting with an Arduino via serial communications.
 
 ## Description
