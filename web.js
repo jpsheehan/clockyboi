@@ -66,6 +66,11 @@ function showVoting() {
   document.getElementById("form-row").style.display = "block";
 }
 
+function resetVote() {
+  localStorage.removeItem("colour");
+  location.reload();
+}
+
 function vote(ev) {
   ev.preventDefault();
 
@@ -115,6 +120,8 @@ document
   .addEventListener("click", makeColourChanger("blue", colours["blue"]));
 
 document.getElementById("form").addEventListener("submit", vote);
+
+document.getElementById("colour-square").addEventListener("click", resetVote);
 
 document.body.onload = function() {
   getSelectedColour();
