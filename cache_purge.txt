@@ -1,0 +1,4 @@
+https://vote.sheehan.nz
+https://vote.sheehan.nz/
+https://vote.sheehan.nz/web.js
+https://vote.sheehan.nz/style.js
