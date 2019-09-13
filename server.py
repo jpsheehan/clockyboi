@@ -42,7 +42,6 @@ class VotingHTTPRequestHandler(BaseHTTPRequestHandler):
                     self.send_response(200)
                     self.send_character("b")
                 else:
-                    print(data)
                     self.send_response(400)
             self.end_headers()
             self.wfile.write(b"")
